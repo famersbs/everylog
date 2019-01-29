@@ -1,0 +1,21 @@
+.progress-with-percentage {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+    > .progress-board {
+        color: #000!important;
+        flex-grow: 1;
+        height: 10px;
+
+        > .progress-bar{
+            height: 100%;
+            color: #fff!important;
+        }
+    }
+    > span {
+        margin-left: 5px;
+        width: 30px;
+        text-align: right;
+    }
+}
+
