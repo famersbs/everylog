@@ -1,32 +1,51 @@
 import React from 'react'
 
-import {CardType} from '../../../modules/list'
+import {CardType, CardStatus} from '../../../modules/card'
 
 import BaseCard from './base'
 import WorkOutCard from './workout'
 import TextCard from './text'
 import BookCard from './book'
+import BodyCard from './body'
+
+const CardMapper = {
+  [CardType.WORKOUT]: WorkOutCard,
+  [CardType.BOOK]: BookCard,
+  [CardType.TEXT]: TextCard,
+  [CardType.BODY]: BodyCard,
+}
+
+function getCardTypeByStatus(status) {
+  return status === CardStatus.WRITE ? CardStatus.WRITE :
+         status === CardStatus.NEW ? CardStatus.NEW :
+         CardStatus.VIEW
+}
 
 export default function render(card) {
-    let Card = null
 
-    switch(card.type){
-        case CardType.WORKOUT:
-        Card = WorkOutCard;
-        break;
-        case CardType.TEXT:
-        Card = TextCard;
-        break;
-        case CardType.BOOK:
-        Card = BookCard;
-        break;
-        default:
-        return null
-    }
+  const mapedCards = CardMapper[card.type]
+  if (mapedCards == null) return null
 
-    return (
-        <BaseCard key={card.id} title={card.title} updated_at={card.updated_at} >
-            <Card {...card} />
-        </BaseCard>
-    )
+  const targetCard = getCardTypeByStatus(card.status)
+
+
+  const Card = mapedCards[targetCard]
+  let noTitle = false, noFooter = false
+  if(card.status === CardStatus.NEW) {
+    noTitle = true
+    noFooter = true
+  }
+
+  return (
+    <BaseCard
+      key={card.id}
+      title={card.title}
+      updated_at={card.updated_at}
+      status={card.status}
+      noTitle={noTitle}
+      noFooter={noFooter}
+    >
+      <Card {...card} />
+    </BaseCard>
+  )
 }

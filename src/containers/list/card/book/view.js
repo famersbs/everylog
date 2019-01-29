@@ -3,7 +3,7 @@ import moment from 'moment'
 
 import "./book.card.scss"
 
-import {colorMap} from '../../../type'
+import {colorMap} from '../../../../type'
 
 const Book = (props) => {
     const { summary, updated_at } = props

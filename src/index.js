@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { HashRouter, Switch } from 'react-router-dom'
-import store, { history } from './store'
+import store from './store'
 import App from './containers/app'
 
 import 'sanitize.css/sanitize.css'
@@ -12,7 +12,7 @@ const target = document.querySelector('#root')
 
 render(
   <Provider store={store}>
-    <HashRouter history={history}>
+    <HashRouter>
         <Switch>
             <App />
         </Switch>

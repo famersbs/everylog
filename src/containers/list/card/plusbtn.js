@@ -1,9 +1,9 @@
 import React from 'react'
 
 const PlusBtn = (props) => (
-    <div className="item-button">
+    <button className="item-button" onClick={props.onClick}>
         <i className="fas fa-plus" />
-    </div>
+    </button>
   )
 
   export default PlusBtn

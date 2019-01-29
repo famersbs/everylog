@@ -14,25 +14,26 @@ class List extends React.Component {
 
   renderRows(){
     return this.props.rows.map((r, k) => (
-        <Row key={k} title={r.title} cards={r.cards} />
+      <Row key={k} id={r.id} title={r.title} cards={r.cards} type={r.type} />
     ))
   }
+
   render() {
-  return (
-    <div className="main_bg">
+    return (
+      <div className="main_bg">
         <Header />
         <div className="body">
-            <div className="board">
-                {this.renderRows()}
-            </div>
+          <div className="board">
+            {this.renderRows()}
+          </div>
         </div>
-    </div>
-  )
+      </div>
+    )
   }
 }
 
 const mapStateToProps = ({list}) => ({
-    rows: list.rows
+  rows: list.rows
 })
 
 const mapDispatchToProps = dispatch =>

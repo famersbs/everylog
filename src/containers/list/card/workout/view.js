@@ -1,6 +1,6 @@
 import React from 'react'
 import { Line } from 'react-chartjs-2'
-import '../../../utils/chartjs/horizonalline.plugin'
+import '../../../../utils/chartjs/horizonalline.plugin'
 
 const chartOption = (goal) => ({
     responsive: true,
@@ -26,7 +26,9 @@ const chartOption = (goal) => ({
     }]
 })
 
-const Workout = (props) => (
+const Workout = (props) => {
+
+  return (
     <div className="chart-container"
         style={{zIndex:"0", position: "relative", height:"30px", width:"100%"}}>
         <Line
@@ -37,5 +39,6 @@ const Workout = (props) => (
             />
     </div>
   )
+}
 
   export default Workout
