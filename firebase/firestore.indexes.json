@@ -1,4 +1,12 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionID": "card",
+      "fields": [
+        { "fieldPath": "uid", "mode": "ASCENDING" },
+        { "fieldPath": "updated_at", "mode": "ASCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

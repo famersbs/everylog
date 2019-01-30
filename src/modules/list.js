@@ -1,9 +1,34 @@
-//export const INCREMENT_REQUESTED = 'counter/INCREMENT_REQUESTED'
 import moment from 'moment'
 
-import {colorMap} from '../type'
+import * as msgbox from '../utils/msgbox'
 
+import { colorMap } from '../type'
 import { CardType } from './card'
+
+import { store } from '../utils/fb'
+
+const UPDATE = 'list/update'
+
+const initialState = {
+  rows: []
+}
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case UPDATE:
+      return {...state, rows: action.payload}
+    default:
+      return state
+  }
+}
+
+export const update = (rows) => {
+  return {
+    type: UPDATE,
+    payload: rows,
+  }
+}
+
 
 const sampleSummary =  {
   labels: [-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0],
@@ -17,95 +42,104 @@ const sampleSummary =  {
   goal: 15,
 }
 
-
-const initialState = {
-  rows: [
-    {
-      id: 0,
-      title: "Work out",
-      type: CardType.WORKOUT,
-      cards: [
-        {
-          id: 1,
-          type: CardType.WORKOUT,
-          title: "Push up 20 x 3",
-          summary: sampleSummary,
-          updated_at: moment().unix() - (60 * 60 * 24 * 3),
-        },
-        {
-          id: 2,
-          type: CardType.WORKOUT,
-          title: "Pull up 20 x 3",
-          summary: {
-              ...sampleSummary,
-              datasets: [{
-                  ...sampleSummary.datasets[0],
-                  ...colorMap.normal
-              }]
-          },
-          updated_at: moment().unix() - (60 * 60 * 24 * 3),
-        },
-        {
-          id: 3,
-          type: CardType.WORKOUT,
-          title: "Pull up 20 x 3",
-          summary: {
-              ...sampleSummary,
-              datasets: [{
-                  ...sampleSummary.datasets[0],
-                  ...colorMap.bad
-              }]
-          },
-          updated_at: moment().unix() - (60 * 60 * 24 * 3),
-        },
-      ]
-    },
-    {
-      id: 1,
-      title: "Book",
-      type: CardType.BOOK,
-      cards: [
-        {
-          id: 4,
-          type: CardType.BOOK,
-          title: "Push up 20 x 3",
-          summary: {
-              progress: 10,
-          },
-          updated_at: moment().unix(),
-        },
-        {
-          id: 5,
-          type: CardType.BOOK,
-          title: "Push up 20 x 3",
-          summary: {
-              progress: 15,
-          },
-          updated_at: moment().unix() - (60 * 60 * 24),
-        },
-        {
-          id: 6,
-          type: CardType.BOOK,
-          title: "Push up 20 x 3",
-          summary: {
-              progress: 20,
-          },
-          updated_at: moment().unix() - (60 * 60 * 24 * 3),
-        },
-      ]
-    },
-    {
-      id: 2,
-      title: "Body Measurement",
-      type: CardType.BODY,
-      cards: [],
-    }
-  ]
+const sampleBookSummary = {
+  progress: 15,
 }
 
-export default (state = initialState, action) => {
-  switch (action.type) {
-    default:
-      return state
+export const load = (uid) => {
+  return (dispatch, getState) => {
+
+    const state =  getState()
+    let lastestCardUpdateDate = 0
+    uid = uid == null ? state.auth.uid : uid
+
+    const rowMappingTable = {
+      [CardType.BODY]:0,
+      [CardType.WORKOUT]:1,
+      [CardType.BOOK]:2,
+      [CardType.TEXT]:3,
+    }
+    let rows = []
+
+    // Make rows
+    Object.keys(rowMappingTable).forEach(k => {
+      rows[rowMappingTable[k]] = {
+        id: rowMappingTable[k],
+        title: k,
+        type: k,
+        cards: [],
+      }
+    })
+
+    let works = []
+    works.push(
+      store.collection('card')
+        .where("uid", "==", uid)
+        .get()
+      )
+
+    Promise.all(works)
+    .then(result => {
+
+      // let cardMap = {}
+      const cards = result[0]
+      cards.forEach(doc => {
+        const cardID = doc.id
+        const data = doc.data()
+
+        // Build cards
+        // cardMap[cardID] =
+        const card = {
+          id: cardID,
+          ...data,
+          summary: data.type === CardType.BOOK ? sampleBookSummary: sampleSummary,
+        }
+
+        rows[rowMappingTable[card.type]].cards.push(card)
+
+        lastestCardUpdateDate = Math.max(lastestCardUpdateDate, card.updated_at)
+      })
+
+      rows.forEach(r => {
+        r.card = r.cards.sort((a,b) => b.updated_at - a.updated_at)
+      })
+
+      // Dispatch
+      dispatch(update(rows))
+
+
+      store.collection('card')
+        .where("uid", "==", uid)
+        .where("updated_at", ">", lastestCardUpdateDate)
+        .onSnapshot( {},
+          q => {
+            q.docChanges().forEach( change => {
+              console.log("Changed ", change)
+              if(change.type === 'added') {
+                const doc = change.doc
+                const rows = getState().list.rows
+
+                const cardID = doc.id
+                const data = doc.data()
+
+                // Build cards
+                const card = {
+                  id: cardID,
+                  ...data,
+                  summary: data.type === CardType.BOOK ? sampleBookSummary: sampleSummary,
+                }
+
+                rows[rowMappingTable[card.type]].cards.push(card)
+                rows[rowMappingTable[card.type]].cards.sort((a,b) => b.updated_at - a.updated_at)
+              }
+            }
+          )
+        }
+      )
+    })
+    .catch(e => {
+      msgbox.error('load fail', e)
+      console.log(e)
+    })
   }
 }

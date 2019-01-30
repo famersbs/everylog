@@ -1,0 +1,80 @@
+.login-bg {
+  width: 100%;
+  height: 100vh;
+  margin: 0px auto;
+  padding: 0px;
+
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background: #fff;
+
+  > .login-container{
+    width: 390px;
+    height: 100%;
+    padding-top: 85px;
+
+    > .login-form {
+      width: 100%;
+      margin: 0px;
+      padding: 0px;
+      box-sizing: border-box;
+      display: block;
+
+      > .title {
+        padding-bottom: 70px;
+        display: block;
+        font-size: 39px;
+        color: #333333;
+        line-height: 1.2;
+        text-align: center;
+      }
+      > .logo {
+        display: block;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        margin-bottom: 70px;
+      }
+
+      > .login {
+        display: block;
+        width: 100%;
+        margin: auto;
+        text-align: center;
+
+        > button:hover {
+          border-radius: 4px;
+          box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+        }
+
+        > button {
+          text-decoration: none;
+          outline: 0;
+          margin: 0px;
+          padding: 0px;
+          border: none;
+
+          cursor: pointer;
+          transition-duration: 200ms;
+          transition-property: border, box-shadow, color, fill;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+
+        }
+      }
+    }
+  }
+}

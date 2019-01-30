@@ -21,7 +21,7 @@ class List extends React.Component {
   render() {
     return (
       <div className="main_bg">
-        <Header />
+        <Header photoURL={this.props.photoURL} />
         <div className="body">
           <div className="board">
             {this.renderRows()}
@@ -32,8 +32,9 @@ class List extends React.Component {
   }
 }
 
-const mapStateToProps = ({list}) => ({
-  rows: list.rows
+const mapStateToProps = ({list, auth}) => ({
+  rows: list.rows,
+  photoURL: auth.photoURL,
 })
 
 const mapDispatchToProps = dispatch =>

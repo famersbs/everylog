@@ -28,6 +28,7 @@ export default function render(card) {
 
   const targetCard = getCardTypeByStatus(card.status)
 
+  const title = card.setting ? card.setting.title : ''
 
   const Card = mapedCards[targetCard]
   let noTitle = false, noFooter = false
@@ -39,7 +40,7 @@ export default function render(card) {
   return (
     <BaseCard
       key={card.id}
-      title={card.title}
+      title={title}
       updated_at={card.updated_at}
       status={card.status}
       noTitle={noTitle}

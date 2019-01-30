@@ -8,14 +8,39 @@ import App from './containers/app'
 import 'sanitize.css/sanitize.css'
 import './scss/index.scss'
 
+import { auth } from './utils/fb'
+import { setLoginStatus } from './modules/auth'
+import { load } from './modules/list'
+
 const target = document.querySelector('#root')
+
+// Auth check
+auth()
+  .onAuthStateChanged( user => {
+    let status = {}
+    if(user){
+      status.isLogin = true
+      status.photoURL = user.photoURL
+      status.uid = user.uid
+
+      console.log(status)
+
+      load(user.uid)(store.dispatch, store.getState)
+
+    } else {
+      status.isLogin = false
+    }
+
+    store.dispatch(setLoginStatus(status))
+
+  })
 
 render(
   <Provider store={store}>
     <HashRouter>
-        <Switch>
-            <App />
-        </Switch>
+      <Switch>
+        <App />
+      </Switch>
     </HashRouter>
   </Provider>,
   target
