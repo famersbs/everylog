@@ -6,7 +6,7 @@
   "repository": "github:famersbs/everylog",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "npm run predeploy && firebase deploy",
+    "deploy": "npm run predeploy && firebase deploy --only hosting",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

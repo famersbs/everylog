@@ -1,6 +1,8 @@
 {
   "indexes": [
     {
+      "queryScope": "COLLECTION",
+      "collectionGroup": "card",
       "collectionID": "card",
       "fields": [
         { "fieldPath": "uid", "mode": "ASCENDING" },
