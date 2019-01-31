@@ -13,7 +13,6 @@ const Header = (props) => (
     <div className="right-menu" >
       <div className="actions">
         {Object.keys(rowMappingTable).map( k => {
-          console.log("What!!! ", k, props.selected_row)
           return (
             <button
               key={k}
