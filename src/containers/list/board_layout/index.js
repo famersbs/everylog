@@ -20,7 +20,7 @@ const Layout = (props) => {
       {Object.keys(rowMappingTable).map( (type, idx) => {
         const filteredCards = cards
           .filter( c => c.type === type )
-          .sort((a,b) => b.updated_at - a.updated_at)
+          .sort((a,b) => b.created_at - a.created_at)
         return (
           <Row
             key={idx}
