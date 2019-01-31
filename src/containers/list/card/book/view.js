@@ -4,10 +4,14 @@ import moment from 'moment'
 import "./book.card.scss"
 
 import {colorMap} from '../../../../type'
+import {getDurationByValue} from '../../../../type'
+import {diffByDay} from '../../../../utils/time'
 
 const Book = (props) => {
+
     const { setting, summary, updated_at } = props
-    const differnecy = moment().diff(moment.unix(updated_at), 'days')
+    const differnecy = diffByDay(moment(), moment.unix(updated_at), getDurationByValue(setting.duration).momentDiffUnit)
+
     let percentage = 0
     if (summary != null && summary.progress != null) {
       percentage = Math.ceil((summary.progress / setting.amount ) * 100)

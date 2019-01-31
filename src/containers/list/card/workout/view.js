@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2'
 import moment from 'moment'
 
 import '../../../../utils/chartjs/horizonalline.plugin'
+import { diffByDay } from '../../../../utils/time'
 import { colorMap } from '../../../../type'
 
 import { SUMMARY_DAY } from '../../../../modules/list'
@@ -19,7 +20,7 @@ const getData = (logs) =>  {
 
   logs.forEach(l => {
     const target_date = moment.unix(l.target_date).hours(0)
-    const diffrence = now.diff(target_date, 'days')
+    const diffrence = diffByDay(now, target_date, 'days')
 
     // For reduce chart days
     if(oldest_target_date.isAfter(target_date)) oldest_target_date = target_date
@@ -32,7 +33,7 @@ const getData = (logs) =>  {
   })
 
   // For reduce chart days
-  const otd_distance = now.diff(oldest_target_date, 'days') + 1
+  const otd_distance = diffByDay(now, oldest_target_date, 'days') + 1
   if (otd_distance < SUMMARY_DAY ) {
     current_labels = labels.slice(SUMMARY_DAY - otd_distance)
     data = data.slice(0, otd_distance)

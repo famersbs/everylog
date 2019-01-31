@@ -1,4 +1,5 @@
 import {InputType} from '../../../../component/cardform'
+import {getDurationItemsForCardForm} from '../../../../type'
 
 export default [
   {
@@ -12,11 +13,7 @@ export default [
     type: InputType.TAGSELECT,
     property_name: 'duration',
     label: 'Duration',
-    items: [
-      {label: "Day", value: "Day"},
-      {label: "Week", value: "Week"},
-      {label: "Month", value: "Month"},
-    ],
+    items: getDurationItemsForCardForm(),
     is_required: true,
   },
   {

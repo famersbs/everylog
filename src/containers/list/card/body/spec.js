@@ -1,4 +1,5 @@
 import {InputType} from '../../../../component/cardform'
+import {getDurationItemsForCardForm} from '../../../../type'
 
 export default [
   {
@@ -23,14 +24,7 @@ export default [
     type: InputType.TAGSELECT,
     property_name: 'unit',
     label: 'Unit',
-    items: [
-      {label: "kg", value: "kg"},
-      {label: "cm", value: "cm"},
-      {label: "%", value: "%"},
-      {label: "lbs", value: "lbs"},
-      {label: "ft", value: "ft"},
-      {label: "inch", value: "inch"},
-    ],
+    items: getDurationItemsForCardForm(),
     is_required: true,
   },
   {

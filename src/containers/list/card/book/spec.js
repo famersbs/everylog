@@ -1,4 +1,5 @@
 import {InputType} from '../../../../component/cardform'
+import {getDurationItemsForCardForm} from '../../../../type'
 
 export default [
   {
@@ -16,11 +17,8 @@ export default [
     type: InputType.TAGSELECT,
     property_name: 'duration',
     label: 'Duration',
-    items: [
-      {label: "Day", value: "Day"},
-      {label: "Week", value: "Week"},
-      {label: "Month", value: "Month"},
-    ]
+    items: getDurationItemsForCardForm(),
+    is_required: true,
   },
   {
     type: InputType.TAGSELECT,
@@ -29,11 +27,13 @@ export default [
     items: [
       {label: "page", value: "page"},
       {label: "chapter", value: "chapter"},
-    ]
+    ],
+    is_required: true,
   },
   {
     type: InputType.NUMBER,
     property_name: 'amount',
-    label: 'page or chapter count'
+    label: 'page or chapter count',
+    is_required: true,
   },
 ]
