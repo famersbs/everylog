@@ -27,7 +27,7 @@ export const setLoginStatus = (status) => {
 
 export const login = () => {
   return (dispatch) => {
-    auth().signInWithPopup(googleProvider)
+    auth().signInWithRedirect(googleProvider)
       .then( r => {
         console.log( "Login success" )
       })

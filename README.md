@@ -47,3 +47,10 @@ service cloud.firestore {
 }
 
 ```
+### if you want to use it with fluid on mac
+
+# Create you fluid app with everylog
+# Run the app
+# Open Preference menu (next to apple icon on the menu bar)
+# Select Whitelist tab
+# Allow browsing to any URL or add google auth and firebase url on teh allow list
