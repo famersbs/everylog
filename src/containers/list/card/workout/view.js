@@ -59,7 +59,7 @@ const getData = (logs) =>  {
 
 const chartOption = (goal) => ({
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     pointDotRadius: 1,
     pointDotStrokeWidth: 4,
     legend: {
