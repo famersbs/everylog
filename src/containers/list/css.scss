@@ -73,9 +73,9 @@
 
             cursor: pointer;
 
-            > i {
-              line-height: 2.3;
-            }
+            display: inline-flex;
+            align-items: center;
+
             margin-right: 12px;
           }
           > .avatar {

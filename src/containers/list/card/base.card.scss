@@ -38,12 +38,41 @@
             word-wrap: break-word;
         }
     }
-    .status {
+    //.status {}
 
-    }
     .item-footer{
         margin-top: 3px;
         vertical-align: bottom;
-        text-align: right;
+        height: 25px;
+
+        display: flex;
+        flex: 0 0 auto;
+        align-items: flex-end;
+
+        > .left {
+          flex: 1;
+          text-align: left;
+
+          > button {
+            cursor: pointer;
+            outline: none;
+            border: none;
+            width: 50px;
+            height: 30px;
+            margin-top: 0px;
+            margin-bottom: -25px;
+            text-align: left;
+            color: #c8c8c8;
+            background-color: #fff;
+          }
+          > button:hover {
+            color: #14aaf5;
+            fill: #14aaf5;
+            border: none;
+          }
+        }
+        > .right {
+          text-align: right;
+        }
     }
 }

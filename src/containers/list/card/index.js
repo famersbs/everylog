@@ -21,19 +21,23 @@ function getCardTypeByStatus(status) {
          CardStatus.VIEW
 }
 
-export default function render(card) {
+export default function render(card, cardStatus, onClickWrite) {
 
   const mapedCards = CardMapper[card.type]
   if (mapedCards == null) return null
 
-  const targetCard = getCardTypeByStatus(card.status)
+  const targetCard = getCardTypeByStatus(cardStatus)
 
   const title = card.setting ? card.setting.title : ''
 
   const Card = mapedCards[targetCard]
+
+  // Base Card Status
   let noTitle = false, noFooter = false
-  if(card.status === CardStatus.NEW) {
+  if(cardStatus === CardStatus.NEW) {
     noTitle = true
+    noFooter = true
+  } else if(cardStatus === CardStatus.WRITE) {
     noFooter = true
   }
 
@@ -42,9 +46,10 @@ export default function render(card) {
       key={card.id}
       title={title}
       updated_at={card.updated_at}
-      status={card.status}
+      status={cardStatus}
       noTitle={noTitle}
       noFooter={noFooter}
+      onClickWrite={onClickWrite}
     >
       <Card {...card} />
     </BaseCard>

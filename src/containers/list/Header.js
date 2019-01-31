@@ -10,9 +10,11 @@ const Header = (props) => (
     </div>
     <div className="right-menu" >
       <div className="actions">
-        <button className="circle-btn" > {/** refresh button*/}
+        {/**
+        <button className="circle-btn" >
           <i className="fas fa-sync-alt" ></i>
         </button>
+        */}
         <div className="avatar"
           style={{backgroundImage: `url("${props.photoURL}")`}}>
         </div>

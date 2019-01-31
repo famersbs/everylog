@@ -10,7 +10,7 @@ import './scss/index.scss'
 
 import { auth } from './utils/fb'
 import { setLoginStatus } from './modules/auth'
-import { load } from './modules/list'
+import { watchCard } from './modules/list'
 
 const target = document.querySelector('#root')
 
@@ -23,9 +23,7 @@ auth()
       status.photoURL = user.photoURL
       status.uid = user.uid
 
-      console.log(status)
-
-      load(user.uid)(store.dispatch, store.getState)
+      watchCard(user.uid)(store.dispatch, store.getState)
 
     } else {
       status.isLogin = false

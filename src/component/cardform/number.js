@@ -1,9 +1,11 @@
 import React from 'react'
 
-const InputBox = props => (
+const NumberBox = props => (
   <div>
     <input
-      type="text"
+      type="number"
+      min="0"
+      inputMode="numeric" pattern="[0-9.]*"
       autoFocus={props.focus}
       placeholder={props.label}
       value={props.value}
@@ -12,4 +14,4 @@ const InputBox = props => (
   </div>
 )
 
-export default InputBox
+export default NumberBox

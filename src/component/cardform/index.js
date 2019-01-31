@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 
 import { updateForm, clear, save } from '../../modules/card'
 
-import Form, { InputType } from './form'
-export { InputType }
+import Form from './form'
+import { DISPLAY_DATE_TIME, InputType } from './type'
+export { InputType, DISPLAY_DATE_TIME }
 
 
 const CardForm = props => {

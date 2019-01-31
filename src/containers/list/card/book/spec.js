@@ -4,7 +4,8 @@ export default [
   {
     type: InputType.TEXT,
     property_name: 'title',
-    label: 'Title'
+    label: 'Title',
+    focus: true,
   },
   {
     type: InputType.TEXT,

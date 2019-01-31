@@ -6,8 +6,9 @@ import "./book.card.scss"
 import {colorMap} from '../../../../type'
 
 const Book = (props) => {
-    const { summary, updated_at } = props
+    const { setting, summary, updated_at } = props
     const differnecy = moment().diff(moment.unix(updated_at), 'days')
+    const percentage = Math.ceil((summary.progress / setting.amount ) * 100)
 
     let color = colorMap.good
     if(differnecy === 1) color = colorMap.normal
@@ -16,10 +17,10 @@ const Book = (props) => {
     return (
     <div className="progress-with-percentage">
         <div className="progress-board" style={{ backgroundColor: `${color.backgroundColor}`}} >
-            <div className="progress-bar" style={{width:`${summary.progress}%`, backgroundColor: `${color.borderColor}`}}/>
+            <div className="progress-bar" style={{width:`${percentage}%`, backgroundColor: `${color.borderColor}`}}/>
         </div>
         <span>
-            {summary.progress}%
+            {percentage}%
         </span>
     </div>
     )

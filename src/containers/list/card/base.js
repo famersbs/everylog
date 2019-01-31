@@ -4,11 +4,10 @@ import moment from 'moment'
 import './base.card.scss'
 
 const Base = (props) => {
-
   return (
-    <button className="item-box">
+    <div className="item-box" >
       {props.noTitle?null:(
-        <div className="title-box">
+        <div className="title-box" onClick={() => console.log('test 222')}>
           <div className="title">
             {props.title}
           </div>
@@ -19,11 +18,20 @@ const Base = (props) => {
       </div>
       {props.noFooter?null:(
         <div className="item-footer">
-          {moment.unix(props.updated_at).fromNow()}
+          <div className="left" >
+            <button onClick={(e) => {
+              props.onClickWrite()
+              e.stopPropagation()
+            } }>
+              <i className="fas fa-pen" />
+            </button>
+          </div>
+          <div className="right">
+            {moment.unix(props.updated_at).fromNow()}
+          </div>
         </div>
       )}
-
-    </button>
+    </div>
   )
 }
 
