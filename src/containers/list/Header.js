@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { rowMappingTable } from './board_layout'
+
 const Header = (props) => (
   <div className="page-topbar">
     <div className="icon-bg">
@@ -10,11 +12,18 @@ const Header = (props) => (
     </div>
     <div className="right-menu" >
       <div className="actions">
-        {/**
-        <button className="circle-btn" >
-          <i className="fas fa-sync-alt" ></i>
-        </button>
-        */}
+        {Object.keys(rowMappingTable).map( k => {
+          console.log("What!!! ", k, props.selected_row)
+          return (
+            <button
+              key={k}
+              className={`tag${k === props.selected_row?' active':''}`}
+              onClick={() => props.onSelectRow(k)}
+            >
+              {rowMappingTable[k]}
+            </button>
+          )
+        })}
         <div className="avatar"
           style={{backgroundImage: `url("${props.photoURL}")`}}>
         </div>

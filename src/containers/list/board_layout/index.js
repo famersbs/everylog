@@ -4,7 +4,7 @@ import { CardType } from '../../../modules/card'
 
 import Row from './Row'
 
-const rowMappingTable = {
+export const rowMappingTable = {
   [CardType.BODY]:    "Body",
   [CardType.WORKOUT]: "Workout",
   [CardType.BOOK]:    "Book",
@@ -13,6 +13,7 @@ const rowMappingTable = {
 
 const Layout = (props) => {
   const cards = Object.keys(props.cards).map( k => props.cards[k] )
+  const selected_row = props.selected_row == null? CardType.BODY : props.selected_row
 
   return (
     <div className="board">
@@ -27,6 +28,7 @@ const Layout = (props) => {
             title={rowMappingTable[type]}
             cards={filteredCards}
             type={type}
+            isSelected={type === selected_row}
           />
         )
       })}

@@ -16,7 +16,7 @@ const Row = (props) => {
   let selectedCard = props.card
   let onPlusBtnClick = () => props.create(props.id, props.type)
 
-  // 여기서 card는 현재 쓰기 혹은 생성 용 카드를 말함
+  // 여기서 card는 현재 쓰기 혹은 생성 용 카드를 말함ㅊ
   if( selectedCard.status === CardStatus.NEW && selectedCard.type === props.type  )
   {
     additionalCard = cardRender({...props.card, id: 'additional'}, selectedCard.status)
@@ -24,7 +24,7 @@ const Row = (props) => {
   }
 
   return (
-    <div className="row">
+    <div className={`row ${props.isSelected?'selected':''}`}>
       <div className="title">
         {props.title}
       </div>
