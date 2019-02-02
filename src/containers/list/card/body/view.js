@@ -12,7 +12,7 @@ const labels = new Array(SUMMARY_DAY).fill(0).map((v,i) => `${SUMMARY_DAY - i} d
 
 // 이 계산 부분을 Redux쪽으로 옮겨야 될듯, 이 계산을 해당 카드 타입에 따른 계산 모듈 쪽으로 옮겨서 처리 하
 // 도록 바꿔야 할듯...
-const getData = (logs) =>  {
+const getData = (logs, settings) =>  {
   let data = new Array(SUMMARY_DAY).fill(null)
   let now = moment().hours(0)
   let oldest_target_date = now
@@ -49,13 +49,23 @@ const getData = (logs) =>  {
     data = data.slice(0, otd_distance)
   }
 
+  // Choose a color
+  let graphColor = colorMap.good
+  const today = data[0]
+  if(today === 0) graphColor = colorMap.bad
+  else if(data.length >= 2) {
+    if (Math.abs(today - settings.baseline) > Math.abs(data[1] - settings.baseline) ) {
+      graphColor = colorMap.normal
+    }
+  }
+
   return {
     labels: current_labels,
     datasets: [
       {
         borderWidth: 2,
         data: data.reverse(),
-        ...colorMap.good,
+        ...graphColor,
 
         pointDotRadius: 1,
         pointColor: "rgba(87, 167, 134, 1)",
@@ -106,7 +116,7 @@ const Body = (props) => {
     <div className="chart-container"
         style={{zIndex:"0", position: "relative", height:"30px", width:"100%"}}>
         <Line
-            data={getData(logs)}
+            data={getData(logs, setting)}
             options={chartOption(setting.baseline)}
             />
     </div>
