@@ -40,7 +40,6 @@ const getData = (logs, settings) =>  {
   }
 
   // Choose a color
-  const todays_goal = settings.baseline - data[0]
   let graphColor = colorMap.normal
   if (settings.baseline <= data[0]) graphColor = colorMap.good
   else if (data[0] === 0 ) graphColor = colorMap.bad

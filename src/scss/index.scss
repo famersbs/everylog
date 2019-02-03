@@ -37,3 +37,19 @@ a:active, a:hover {
 div {
   display: block;
 }
+
+
+button {
+  outline:0;
+  border: none;
+  cursor: pointer;
+}
+
+button:focus {
+  outline:0;
+}
+
+button:active{
+  outline:0;
+  background-color: rgba(200,200,200,1);
+}

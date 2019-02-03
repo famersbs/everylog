@@ -7,10 +7,13 @@ const Base = (props) => {
   return (
     <div className="item-box" >
       {props.noTitle?null:(
-        <div className="title-box" onClick={() => console.log('test 222')}>
+        <div className="title-box">
           <div className="title">
             {props.title}
           </div>
+          <button className="button" onClick={props.onClickArchive}>
+            <i className="fas fa-archive" />
+          </button>
         </div>
       )}
       <div className="status">

@@ -21,7 +21,7 @@ function getCardTypeByStatus(status) {
          CardStatus.VIEW
 }
 
-export default function render(card, cardStatus, onClickWrite) {
+export default function render(card, cardStatus, onClickWrite, onClickArchive = () => {} ) {
 
   const mapedCards = CardMapper[card.type]
   if (mapedCards == null) return null
@@ -50,6 +50,7 @@ export default function render(card, cardStatus, onClickWrite) {
       noTitle={noTitle}
       noFooter={noFooter}
       onClickWrite={onClickWrite}
+      onClickArchive={onClickArchive}
     >
       <Card {...card} />
     </BaseCard>

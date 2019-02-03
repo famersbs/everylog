@@ -6,6 +6,7 @@ import { store } from '../utils/fb'
 export const SUMMARY_DAY = 14     // 14 일 기준으로 써머리 한다.
 
 const UPDATE = 'list/update'
+const DELETE = 'list/delete'
 
 const initialState = {
   card: {},
@@ -15,8 +16,24 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE:
       return {...state, card: {...state.card, ...action.payload}}
+    case DELETE:
+      let newCards = {...state.card}
+      action.payload.forEach(id =>{
+        if(newCards[id] != null){
+          delete newCards[id]
+          console.log("Delete ", id )
+        }
+      })
+      return {...state, card:{...newCards}}
     default:
       return state
+  }
+}
+
+export const deleteCards = (card_ids) => {
+  return {
+    type: DELETE,
+    payload: card_ids,
   }
 }
 
@@ -41,6 +58,7 @@ export const watchCard = (uid) => {
       .onSnapshot( {},
         q => {
           let currentUpdatedCards = {}
+          let deletedCards = []
           const currentCards = getState().list.card
           q.docChanges().forEach( change => {
             if(change.type !== 'removed') {
@@ -56,10 +74,13 @@ export const watchCard = (uid) => {
               }
               currentUpdatedCards[cardID] = card;
             } else {
-              // Removed
-              console.log("Removed card : ", change.doc.id)
+              deletedCards.push(change.doc.id)
             }
           })
+
+        if (deletedCards.length > 0) {
+          dispatch(deleteCards(deletedCards))
+        }
         dispatch(update(currentUpdatedCards))
 
         // Call after Card load once
@@ -96,7 +117,7 @@ export const watchCardLog = (uid) => {
             currentUpdatedCards[cardID] = card;
           } else {
             // Removed
-            console.log("Removed card : ", change.doc.id)
+            console.log("Removed card log : ", change.doc.id)
           }
         })
         dispatch(update(currentUpdatedCards))
