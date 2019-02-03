@@ -77,7 +77,12 @@ const chartOption = (goal) => ({
     },
     scales: {
         xAxes: [{display: false}],
-        yAxes: [{display: false}]
+        yAxes: [{
+          display: false,
+          ticks: {
+            beginAtZero: true
+          }
+        }]
     },
     elements: {
         /*point: {
