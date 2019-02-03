@@ -6,11 +6,12 @@ import { connect } from 'react-redux'
 import List from '../list'
 import Login from '../login'
 import DetailView from '../detail_view'
+import NowLoadingView from '../../component/nowloading'
 
 const App = (props) => {
 
   if ( props.isLogin == null ) {
-    return (<div> Check Login </div>)
+    return (<NowLoadingView/>)
   } else if ( props.isLogin === false ) {
     return (<Login />)
   }
