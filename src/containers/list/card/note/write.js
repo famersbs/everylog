@@ -2,7 +2,7 @@ import React from 'react'
 
 const Text = () => (
     <div>
-        hahaha
+        Not yet implemented
     </div>
   )
 

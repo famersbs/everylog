@@ -4,8 +4,6 @@ import moment from 'moment'
 
 import {DISPLAY_DATE_TIME} from '../component/cardform'
 
-import { deleteCards } from './list'
-
 export const SELECT_CARD = 'card/select_card'
 export const UPDATE_FORM = 'card/update_form'
 

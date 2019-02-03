@@ -21,7 +21,6 @@ export default (state = initialState, action) => {
       action.payload.forEach(id =>{
         if(newCards[id] != null){
           delete newCards[id]
-          console.log("Delete ", id )
         }
       })
       return {...state, card:{...newCards}}
@@ -110,8 +109,13 @@ export const watchCardLog = (uid) => {
             const doc = change.doc
             const log = doc.data()
             const card = currentCards[log.card_id]
+
+            if(card == null){
+              // It is archived card's log
+              return
+            }
+
             const cardID = card.id
-            if(card == null) return
 
             card.logs.push(log)
             currentUpdatedCards[cardID] = card;

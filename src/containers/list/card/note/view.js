@@ -1,9 +1,7 @@
 import React from 'react'
 
 const Text = () => (
-    <div>
-        Text: write
-    </div>
+    <div></div>
   )
 
   export default Text

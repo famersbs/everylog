@@ -4,14 +4,14 @@ import {CardType, CardStatus} from '../../../modules/card'
 
 import BaseCard from './base'
 import WorkOutCard from './workout'
-import TextCard from './text'
+import NoteCard from './note'
 import BookCard from './book'
 import BodyCard from './body'
 
 const CardMapper = {
   [CardType.WORKOUT]: WorkOutCard,
   [CardType.BOOK]: BookCard,
-  [CardType.TEXT]: TextCard,
+  [CardType.NOTE]: NoteCard,
   [CardType.BODY]: BodyCard,
 }
 

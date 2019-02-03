@@ -8,7 +8,7 @@ export const rowMappingTable = {
   [CardType.BODY]:    "Body",
   [CardType.WORKOUT]: "Workout",
   [CardType.BOOK]:    "Book",
-  [CardType.TEXT]:    "Note",
+  [CardType.NOTE]:    "Note",
 }
 
 const Layout = (props) => {
