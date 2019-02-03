@@ -2,10 +2,10 @@ import React from 'react'
 import './scss.scss'
 
 export default () => (
-  <div class="wrap">
-    <div class="loading">
-      <div class="bounceball"></div>
-      <div class="text">NOW LOADING</div>
+  <div className="wrap">
+    <div className="loading">
+      <div className="bounceball"></div>
+      <div className="text">NOW LOADING</div>
     </div>
   </div>
 )
