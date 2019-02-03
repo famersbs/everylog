@@ -10,6 +10,7 @@ import './scss/index.scss'
 
 import { auth } from './utils/fb'
 import { setLoginStatus } from './modules/auth'
+import { loadSettings } from './modules/settings'
 import { watchCard } from './modules/list'
 
 const target = document.querySelector('#root')
@@ -32,6 +33,8 @@ auth()
     store.dispatch(setLoginStatus(status))
 
   })
+// Load Setting
+store.dispatch(loadSettings())
 
 render(
   <Provider store={store}>
