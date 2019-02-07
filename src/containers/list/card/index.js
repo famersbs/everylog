@@ -15,26 +15,17 @@ const CardMapper = {
   [CardType.BODY]: BodyCard,
 }
 
-function getCardTypeByStatus(status) {
-  return status === CardStatus.WRITE ? CardStatus.WRITE :
-         status === CardStatus.NEW ? CardStatus.NEW :
-         CardStatus.VIEW
-}
-
-export default function render(card, cardStatus, onClickWrite, onClickArchive = () => {} ) {
+export default function render(card, cardStatus, onClickWrite, onClickArchive = () => {}, onClickEdit = () => {} ) {
 
   const mapedCards = CardMapper[card.type]
   if (mapedCards == null) return null
 
-  const targetCard = getCardTypeByStatus(cardStatus)
-
   const title = card.setting ? card.setting.title : ''
-
-  const Card = mapedCards[targetCard]
+  const Card = mapedCards[cardStatus]
 
   // Base Card Status
   let noTitle = false, noFooter = false
-  if(cardStatus === CardStatus.NEW) {
+  if(cardStatus === CardStatus.NEW || cardStatus === CardStatus.EDIT) {
     noTitle = true
     noFooter = true
   } else if(cardStatus === CardStatus.WRITE) {
@@ -51,6 +42,7 @@ export default function render(card, cardStatus, onClickWrite, onClickArchive = 
       noFooter={noFooter}
       onClickWrite={onClickWrite}
       onClickArchive={onClickArchive}
+      onClickEdit={onClickEdit}
     >
       <Card {...card} />
     </BaseCard>

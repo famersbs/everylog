@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 
-import { create, clear, write, archive, CardStatus } from '../../../modules/card'
+import { create, clear, edit, write, archive, CardStatus } from '../../../modules/card'
 
 import PlusBtn from '../card/plusbtn'
 import cardRender from '../card'
@@ -43,7 +43,8 @@ const Row = (props) => {
                   msgbox.confirm('Archive card', `Do you want to archive [ ${c.setting.title} ] card?`)
                   .then(r => r.value === true ? props.archive(c.id) : null )
                 }
-                return cardRender(c, stauts, write, archive)
+                const edit =() => props.edit(c.id, c.setting, props.id, props.type)
+                return cardRender(c, stauts, write, archive, edit)
               })
             }
           </div>
@@ -64,6 +65,7 @@ const mapDispatchToProps = dispatch =>
       clear,
       write,
       archive,
+      edit,
     },
     dispatch
   )

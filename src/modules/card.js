@@ -19,6 +19,7 @@ export const CardStatus = {
   NEW : 0,
   WRITE : 1,
   VIEW: 2,
+  EDIT: 3,
 }
 
 const initialState = {
@@ -63,6 +64,20 @@ export const create = (row_id, type) => {
   }
 }
 
+export const edit = (card_id, form, row_id, type) => {
+  console.log(form)
+  return {
+    type: SELECT_CARD,
+    payload: {
+      id: card_id,
+      row_id,
+      type,
+      status: CardStatus.EDIT,
+      form
+    }
+  }
+}
+
 export const write = (card_id, row_id, type) => {
   return {
     type: SELECT_CARD,
@@ -96,6 +111,18 @@ function createANewCard(uid, type, setting) {
     created_at: d,
     updated_at: d,
   })
+}
+
+function editACard(id, setting) {
+  const d = moment().unix()
+  return store.collection('card')
+  .doc(id)
+  .update(
+    {
+      setting,
+      updated_at: d,
+    }
+  )
 }
 
 function addALog(uid, card) {
@@ -148,6 +175,8 @@ export const save = () => {
       work = createANewCard( uid, card.type, card.form )
     } else if (state.card.status === CardStatus.WRITE) {
       work = addALog(uid, card)
+    } else if (state.card.status === CardStatus.EDIT) {
+      work = editACard(card.id, card.form)
     }
 
     // After work

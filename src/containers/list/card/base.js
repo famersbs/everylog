@@ -11,6 +11,9 @@ const Base = (props) => {
           <div className="title">
             {props.title}
           </div>
+          <button className="button" onClick={props.onClickEdit}>
+            <i className="fas fa-edit" />
+          </button>
           <button className="button" onClick={props.onClickArchive}>
             <i className="fas fa-archive" />
           </button>

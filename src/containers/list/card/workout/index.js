@@ -8,4 +8,5 @@ export default {
   [CardStatus.NEW]: New,
   [CardStatus.WRITE]: Write,
   [CardStatus.VIEW]: View,
+  [CardStatus.EDIT]: New,
 }
