@@ -60,25 +60,29 @@ const getData = (logs, settings) =>  {
   }
 
   return {
-    labels: current_labels,
-    datasets: [
-      {
-        borderWidth: 2,
-        data: data.reverse(),
-        ...graphColor,
+    options: chartOption(settings.baseline, data.reduce((p,c) => Math.max(p,c), -1)),
+    data: {
+      labels: current_labels,
+      datasets: [
+        {
+          borderWidth: 2,
+          data: data.reverse(),
+          ...graphColor,
 
-        pointDotRadius: 1,
-        pointColor: "rgba(87, 167, 134, 1)",
-        pointStrokeColor: "rgba(255, 255, 255, 0)",
-        pointHighlightFill: "rgba(87, 167, 134, 0.7)",
-        pointHighlightStroke: "rgba(87, 167, 134, 1)",
-      }
-    ],
+          pointDotRadius: 1,
+          pointColor: "rgba(87, 167, 134, 1)",
+          pointStrokeColor: "rgba(255, 255, 255, 0)",
+          pointHighlightFill: "rgba(87, 167, 134, 0.7)",
+          pointHighlightStroke: "rgba(87, 167, 134, 1)",
+        }
+      ],
+    }
   }
+
 }
 
 
-const chartOption = (goal) => ({
+const chartOption = (goal, peakData) => ({
     responsive: true,
     maintainAspectRatio: false,
     legend: {
@@ -86,12 +90,20 @@ const chartOption = (goal) => ({
     },
     tooltips: {
       callbacks: {
-        title: (tooltipItem, chart) => ([])
+        title: () => ([])
       }
     },
     scales: {
         xAxes: [{display: false}],
-        yAxes: [{display: false}]
+        yAxes: [{
+          display: false,
+          /*
+          ticks: {
+            // beginAtZero: true,
+            max: (Math.max(goal, peakData) + 5) ,
+          }
+          */
+        }]
     },
     elements: {
       /*
@@ -111,13 +123,13 @@ const chartOption = (goal) => ({
 
 const Body = (props) => {
   const { logs, setting } = props
-
+  const data = getData(logs, setting)
   return (
     <div className="chart-container"
         style={{zIndex:"0", position: "relative", height:"30px", width:"100%"}}>
         <Line
-            data={getData(logs, setting)}
-            options={chartOption(setting.baseline)}
+            data={data.data}
+            options={data.options}
             />
     </div>
   )

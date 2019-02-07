@@ -17,6 +17,7 @@ const getData = (logs, settings) =>  {
   let now = moment().hours(0)
   let oldest_target_date = now
   let current_labels = labels;
+  let peakData
 
   logs.forEach(l => {
     const target_date = moment.unix(l.target_date).hours(0)
@@ -45,24 +46,29 @@ const getData = (logs, settings) =>  {
   else if (data[0] === 0 ) graphColor = colorMap.bad
 
   return {
-    labels: current_labels,
-    datasets: [
-      {
-        borderWidth: 2,
-        data: data.reverse(),
-        ...graphColor,
+    options: chartOption(settings.baseline, data.reduce((p,c) => Math.max(p,c), -1)),
+    data: {
+      labels: current_labels,
+      datasets: [
+        {
+          borderWidth: 2,
+          data: data.reverse(),
+          ...graphColor,
 
-        pointDotRadius: 1,
-        pointColor: "rgba(87, 167, 134, 1)",
-        pointStrokeColor: "rgba(255, 255, 255, 0)",
-        pointHighlightFill: "rgba(87, 167, 134, 0.7)",
-        pointHighlightStroke: "rgba(87, 167, 134, 1)",
-      }
-    ],
+          pointDotRadius: 1,
+          pointColor: "rgba(87, 167, 134, 1)",
+          pointStrokeColor: "rgba(255, 255, 255, 0)",
+          pointHighlightFill: "rgba(87, 167, 134, 0.7)",
+          pointHighlightStroke: "rgba(87, 167, 134, 1)",
+        }
+      ],
+    }
   }
+
 }
 
-const chartOption = (goal) => ({
+const chartOption = (goal, peakData) => {
+  return {
     responsive: true,
     maintainAspectRatio: false,
     pointDotRadius: 1,
@@ -72,7 +78,7 @@ const chartOption = (goal) => ({
     },
     tooltips: {
       callbacks: {
-        title: (tooltipItem, chart) => ([])
+        title: () => ([])
       }
     },
     scales: {
@@ -80,7 +86,8 @@ const chartOption = (goal) => ({
         yAxes: [{
           display: false,
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            max: (Math.max(goal, peakData) + 5) ,
           }
         }]
     },
@@ -96,18 +103,20 @@ const chartOption = (goal) => ({
         y: goal,
         style: "rgba(0,255,0,0.4)"
     }]
-})
+  }
+}
 
 const Workout = (props) => {
   const { logs, setting } = props
+  const data = getData(logs, setting)
 
   return (
     <div className="chart-container"
-        style={{zIndex:"0", position: "relative", height:"100px", width:"100%"}}>
+        style={{zIndex:"0", position: "relative", height:"30px", width:"100%"}}>
         <Line
           height={100}
-          data={getData(logs, setting)}
-          options={chartOption(setting.baseline)}
+          data={data.data}
+          options={data.options}
         />
     </div>
   )
