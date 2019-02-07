@@ -17,7 +17,6 @@ const getData = (logs, settings) =>  {
   let now = moment().hours(0)
   let oldest_target_date = now
   let current_labels = labels;
-  let peakData
 
   logs.forEach(l => {
     const target_date = moment.unix(l.target_date).hours(0)

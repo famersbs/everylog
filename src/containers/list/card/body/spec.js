@@ -13,18 +13,22 @@ export default [
     type: InputType.TAGSELECT,
     property_name: 'duration',
     label: 'Duration',
-    items: [
-      {label: "Day", value: "Day"},
-      {label: "Week", value: "Week"},
-      {label: "Month", value: "Month"},
-    ],
+    items: getDurationItemsForCardForm(),
     is_required: true,
   },
   {
     type: InputType.TAGSELECT,
     property_name: 'unit',
     label: 'Unit',
-    items: getDurationItemsForCardForm(),
+    items: [
+      {label: "%", value: "%"},
+      {label: "Kg", value: "kg"},
+      {label: "Cm", value: "cm"},
+      {label: "lbs", value: "lbs"},
+      {label: "inch", value: "inch"},
+      {label: "ml", value: "ml"},
+      {label: "l", value: "l"},
+    ],
     is_required: true,
   },
   {

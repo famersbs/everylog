@@ -1,5 +1,4 @@
 import {InputType} from '../../../../component/cardform'
-import {getDurationItemsForCardForm} from '../../../../type'
 
 export default [
   {
