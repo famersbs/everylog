@@ -35,8 +35,6 @@ export default function Validator(form, spec) {
         return false
       }
     }
-
-    console.log(currentSpec.property_name, currentValue)
   }
   return true
 }

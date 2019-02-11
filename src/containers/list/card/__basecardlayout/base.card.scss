@@ -43,7 +43,7 @@
 
       > .button {
         color: #c8c8c8;
-        align-self: flex-end;
+        align-self: flex-start;
       }
       > .button:hover {
         color: inherit;
@@ -73,7 +73,7 @@
             margin-top: 0px;
             margin-bottom: -25px;
             text-align: left;
-            color: #c8c8c8;
+            color: rgb(200, 200, 200);
             background-color: #fff;
           }
           > button:hover {

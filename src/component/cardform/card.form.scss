@@ -1,5 +1,6 @@
 .new_form {
   text-align: left;
+  width: 100%;
 
   > div {
     margin: 5px 0;
@@ -23,12 +24,12 @@
     border-radius: 4px;
     color: #4a4a4a;
     display: inline-flex;
-    font-size: .75rem;
+    font-size: 0.75rem;
     height: 2em;
     justify-content: center;
     line-height: 1.5;
-    padding-left: .75em;
-    padding-right: .75em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
     white-space: nowrap;
 
     margin-left: 5px;
@@ -36,11 +37,11 @@
   }
 
   button:focus {
-    outline:0;
+    outline: 0;
   }
-  button:active{
-    outline:0;
-    background-color: rgba(200,200,200,1);
+  button:active {
+    outline: 0;
+    background-color: rgba(200, 200, 200, 1);
   }
 
   .tag.active {
@@ -49,7 +50,7 @@
   }
 
   .button-bar {
-    border-top-color: rgba(200,200,200,1);
+    border-top-color: rgba(200, 200, 200, 1);
     border-top-width: 1px;
     border-top-style: solid;
     padding-top: 10px;
@@ -60,6 +61,4 @@
       margin-right: 5px;
     }
   }
-
 }
-

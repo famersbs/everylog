@@ -2,13 +2,10 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-
-import { create, clear, edit, write, archive, CardStatus } from '../../../modules/card'
+import { create, CardStatus } from '../../../modules/card'
 
 import PlusBtn from '../card/plusbtn'
-import cardRender from '../card'
-
-import * as msgbox from '../../../utils/msgbox'
+import Card from '../card'
 
 import './row.scss'
 
@@ -16,13 +13,15 @@ const Row = (props) => {
 
   let additionalCard = null
   let selectedCard = props.card
-  let onPlusBtnClick = () => props.create(props.id, props.type)
+  let onPlusBtnClick = null
 
-  // 여기서 card는 현재 쓰기 혹은 생성 용 카드를 말함ㅊ
+  // 여기서 card는 현재 쓰기 혹은 생성 용 카드를 말함
   if( selectedCard.status === CardStatus.NEW && selectedCard.type === props.type  )
   {
-    additionalCard = cardRender({...props.card, id: 'additional'}, selectedCard.status)
+    additionalCard = <Card card={{...props.card, id: 'additional' }} cardStatus={selectedCard.status} />
     onPlusBtnClick = props.clear
+  } else {
+    onPlusBtnClick = () => props.create(props.type)
   }
 
   return (
@@ -37,14 +36,11 @@ const Row = (props) => {
             {additionalCard}
             {props.cards.map(c =>
               {
-                const stauts =  c.id === selectedCard.id ? selectedCard.status : CardStatus.VIEW
-                const write = () => props.write(c.id, props.id, props.type)
-                const archive = () => {
-                  msgbox.confirm('Archive card', `Do you want to archive [ ${c.setting.title} ] card?`)
-                  .then(r => r.value === true ? props.archive(c.id) : null )
-                }
-                const edit =() => props.edit(c.id, c.setting, props.id, props.type)
-                return cardRender(c, stauts, write, archive, edit)
+                return <Card
+                  key={c.id}
+                  card={c}
+                  cardStatus={c.id === selectedCard.id ? selectedCard.status : CardStatus.VIEW}
+                />
               })
             }
           </div>
@@ -54,18 +50,16 @@ const Row = (props) => {
   )
 }
 
-const mapStateToProps = ({ card }) => ({
-  card
-})
+const mapStateToProps = ({card}) => (
+  {
+    card,
+  }
+)
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       create,
-      clear,
-      write,
-      archive,
-      edit,
     },
     dispatch
   )

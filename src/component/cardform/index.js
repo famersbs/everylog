@@ -1,44 +1,36 @@
-import React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
 
-import { updateForm, clear, save } from '../../modules/card'
+import { getInputComponent } from './getInputComponent'
+import Validator from './validator'
 
-import Form from './form'
+import './card.form.scss'
+
 import { DISPLAY_DATE_TIME, InputType } from './type'
-export { InputType, DISPLAY_DATE_TIME }
-
+export { DISPLAY_DATE_TIME, InputType }
 
 const CardForm = props => {
-  const { spec, updateForm, clear, save } = props
-  const form = props.card.form
-
+  const { spec, clear, save } = props
+  const [formState, setForm] = useState(props.form?props.form:{})
   return (
-    <Form
-      form={form}
-      updateForm={updateForm}
-      spec={spec}
-      onSave={save}
-      onCancel={clear}
-    />
+    <div className="new_form">
+      {spec.map(i => {
+        let Input = getInputComponent(i.type)
+        if( Input == null) return null
+
+        const input = i
+        const value = formState[i.property_name] == null? '': formState[i.property_name]
+
+        return <Input
+          key={i.property_name}
+          spec={i}
+          onChange={(value) => setForm({...formState, [input.property_name]: value})}
+          value={value} />
+      })}
+      <div className="button-bar">
+        <button onClick={() => Validator(formState, spec) ? save(formState) : null}>Save</button>
+        <button onClick={() => clear()}>Cancel</button>
+      </div>
+    </div>
   )
 }
-
-const mapStateToProps = ({ card }) => ({
-  card
-})
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      updateForm,
-      save,
-      clear
-    },
-    dispatch
-  )
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CardForm)
+export default CardForm

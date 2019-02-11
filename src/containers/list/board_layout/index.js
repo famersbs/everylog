@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CardType } from '../../../modules/card'
+import { CardType } from '../../../type'
 
 import Row from './Row'
 

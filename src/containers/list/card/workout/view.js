@@ -6,12 +6,11 @@ import '../../../../utils/chartjs/horizonalline.plugin'
 import { diffByDay } from '../../../../utils/time'
 import { colorMap } from '../../../../type'
 
-import { SUMMARY_DAY } from '../../../../modules/list'
+import { SUMMARY_DAY } from '../../../../db/card'
 
 const labels = new Array(SUMMARY_DAY).fill(0).map((v,i) => `${SUMMARY_DAY - i} days ago` )
 
-// 이 계산 부분을 Redux쪽으로 옮겨야 될듯, 이 계산을 해당 카드 타입에 따른 계산 모듈 쪽으로 옮겨서 처리 하
-// 도록 바꿔야 할듯...
+// 어차피 해당 카드가 업데이트 될 때만 다시 그리기 때문에 여기서 계산해도 상관 없음
 const getData = (logs, settings) =>  {
   let data = new Array(SUMMARY_DAY).fill(0)
   let now = moment().hours(0)
@@ -106,7 +105,7 @@ const chartOption = (goal, peakData) => {
 }
 
 const Workout = (props) => {
-  const { logs, setting } = props
+  const { logs, setting } = props.card
   const data = getData(logs, setting)
 
   return (

@@ -1,11 +1,11 @@
 import React from 'react'
 
 const TagSelectBox = props => {
-  const {label, items, value, onChange} = props
+  const {spec, value, onChange} = props
   return (
     <div>
-      <span>{label}</span>
-      {items.map(i => (
+      <span>{spec.label}</span>
+      {spec.items.map(i => (
         <button
           key={i.value}
           className={ i.value === value ? "tag active" : "tag" }

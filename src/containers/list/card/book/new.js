@@ -4,9 +4,10 @@ import CardForm from '../../../../component/cardform'
 import spec from './spec'
 
 const Book = (props) => {
-    return (
-      <CardForm spec={spec} />
-    )
+  const { save, clear } = props.actions
+  return (
+    <CardForm spec={spec} form={props.card.setting} save={save} clear={clear} />
+  )
 }
 
 export default Book

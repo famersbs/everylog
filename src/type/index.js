@@ -1,3 +1,11 @@
+export const CardType = {
+  WORKOUT: 'workout',
+  TEXT: 'text',
+  BOOK: 'book',
+  BODY: 'body',
+  NOTE: 'note',
+}
+
 export const colorMap = {
     good :{
       backgroundColor: 'rgba(50,205,50,0.5)',
@@ -42,3 +50,4 @@ export const getDurationByValue = (v) => {
   if(filtered.length > 0) return durationMap[filtered[0]]
   else return durationMap.DAY
 }
+

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import CardForm, {InputType}from '../../../../component/cardform'
+import CardForm, { InputType } from '../../../../component/cardform'
 
 const Book = (props) => {
   const spec = [
@@ -8,15 +8,16 @@ const Book = (props) => {
       type: InputType.DATETIME,
       property_name: 'target_date',
       label: 'Target Date',
+      default_set_now: true,
       is_required: true,
     },
     {
       type: InputType.NUMBER,
       property_name: 'progress',
-      label: props.setting.unit,
+      label: props.card.setting.unit,
       focus: true,
       is_required : true,
-      maximum_value: props.setting.amount,
+      maximum_value: props.card.setting.amount,
     },
     {
       type: InputType.TEXTAREA,
@@ -24,9 +25,9 @@ const Book = (props) => {
       label: 'Comment',
     },
   ]
-
+  const { save, clear } = props.actions
   return (
-    <CardForm spec={spec} />
+    <CardForm spec={spec} save={save} clear={clear} />
   )
 }
 

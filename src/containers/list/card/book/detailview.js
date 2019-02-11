@@ -23,12 +23,7 @@ const Book = (props) => {
 
     return (
     <div className="progress-with-percentage">
-        <div className="progress-board" style={{ backgroundColor: `${color.backgroundColor}`}} >
-            <div className="progress-bar" style={{width:`${percentage}%`, backgroundColor: `${color.borderColor}`}}/>
-        </div>
-        <span>
-            {percentage}%
-        </span>
+        Detail View
     </div>
     )
 }

@@ -1,14 +1,21 @@
 import React from 'react'
 import Cleave from 'cleave.js/react'
+import moment from 'moment'
+
+import { DISPLAY_DATE_TIME } from './type'
 
 // value = unix time stamp
 const DateTimeBox = props => {
-  const datetime = props.value
+  let datetime = props.value
+
+  if ( datetime === '' && props.spec.default_set_now ) {
+    setTimeout(() => props.onChange(moment().format(DISPLAY_DATE_TIME)), 0)
+  }
 
   return (
     <div>
       <Cleave
-        placeholder={props.label}
+        placeholder={props.spec.label}
         options={{
           delimiters: ['/', '/', ' ', ':'],
           blocks: [4, 2, 2, 2, 2]

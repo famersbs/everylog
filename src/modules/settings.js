@@ -1,4 +1,4 @@
-import { CardType } from './card'
+import { CardType } from '../type'
 
 const SELECT_ROW = 'settings/select_row'
 const UPDATE_ALL = 'settings/update_all'

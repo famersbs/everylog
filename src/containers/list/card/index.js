@@ -1,50 +1,121 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-import {CardType, CardStatus} from '../../../modules/card'
+import { CardStatus } from '../../../modules/card'
 
-import BaseCard from './base'
-import WorkOutCard from './workout'
-import NoteCard from './note'
-import BookCard from './book'
-import BodyCard from './body'
+import * as msgbox from '../../../utils/msgbox'
+import BaseCardLayout from './__basecardlayout'
+import { getCardComponent } from './mapper'
 
-const CardMapper = {
-  [CardType.WORKOUT]: WorkOutCard,
-  [CardType.BOOK]: BookCard,
-  [CardType.NOTE]: NoteCard,
-  [CardType.BODY]: BodyCard,
+import { clear, edit, write, showDetail } from '../../../modules/card'
+import {
+  createANewCard,
+  editACard,
+  addALog,
+  archive,
+} from '../../../db/card'
+
+function CardLayout(props) {
+  const {
+    card,
+    cardStatus,
+  } = props
+
+  // Get Current Card Component
+  const CardComponent = getCardComponent(card, cardStatus)
+  return (
+    <BaseCardLayout
+      key={card.id} card={card} status={cardStatus}
+      options={getBaseCardOptions(cardStatus)}
+      actions={getBaseCardActions(props)}
+    >
+      <CardComponent card={card} actions={getCardActions(props)} />
+    </BaseCardLayout>
+  )
 }
 
-export default function render(card, cardStatus, onClickWrite, onClickArchive = () => {}, onClickEdit = () => {} ) {
+const mapStateToProps = ({ card, auth }, ownProps) => {
+  return {
+    uid: auth.uid,
+    // card: ownProps.card, // It just here for rerendering when list will be changed
+    card: (card.id === ownProps.card.id? card : ownProps.card)
+  }
+}
 
-  const mapedCards = CardMapper[card.type]
-  if (mapedCards == null) return null
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      clear,// 이 부분을 global 하게 바꾸면, map 하는 부분이 없어진다.
+      write,
+      edit,
+      showDetail,
+    },
+    dispatch
+  )
 
-  const title = card.setting ? card.setting.title : ''
-  const Card = mapedCards[cardStatus]
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CardLayout)
 
-  // Base Card Status
-  let noTitle = false, noFooter = false
-  if(cardStatus === CardStatus.NEW || cardStatus === CardStatus.EDIT) {
-    noTitle = true
-    noFooter = true
-  } else if(cardStatus === CardStatus.WRITE) {
-    noFooter = true
+//////////////////////////////////////////////////////////////////
+// private functions
+const getBaseCardOptions = (status) => {
+  const baseOptions = { noTitle: false, noFooter: false, isPopup: false }
+  switch(status) {
+    case CardStatus.NEW:
+    case CardStatus.EDIT:
+      return { ...baseOptions, noTitle: true, noFooter: true }
+    case CardStatus.WRITE:
+      return { ...baseOptions, noTitle: true }
+    case CardStatus.DETAILVIEW:
+      return { ...baseOptions, isPopup: true }
+    default:
+      return baseOptions
+  }
+}
+
+const getBaseCardActions = ({
+  card,
+  clear,
+  write,
+  edit,
+  showDetail,
+}) =>  ({
+  onClickWrite: () => write(card.id, card.type),
+  onClickArchive:  () => {
+    msgbox.confirm('Archive card', `Do you want to archive [ ${card.setting.title} ] card?`)
+    .then(r => r.value === true ? archive(card.id) : null )
+  },
+  onClickEdit : () => edit(card.id, card.setting, card.type),
+  onClickDetailView: () => showDetail(card.id, card.type),
+  onClickClear : clear,
+})
+
+const getCardActions = (props) => {
+  const baseActions = {
+    clear: props.clear,
+    save: null,
   }
 
-  return (
-    <BaseCard
-      key={card.id}
-      title={title}
-      updated_at={card.updated_at}
-      status={cardStatus}
-      noTitle={noTitle}
-      noFooter={noFooter}
-      onClickWrite={onClickWrite}
-      onClickArchive={onClickArchive}
-      onClickEdit={onClickEdit}
-    >
-      <Card {...card} />
-    </BaseCard>
-  )
+  switch(props.cardStatus) {
+    case CardStatus.NEW:
+      return {...baseActions, save: (form) => {
+        createANewCard(props.uid, props.card.type, form)
+        .then(() => props.clear())
+      }}
+    case CardStatus.EDIT:
+      return {...baseActions, save: (form) => {
+        editACard(props.card.id, form)
+        .then(() => props.clear())
+      }}
+    case CardStatus.WRITE:
+      return {...baseActions, save: (form) => {
+        addALog(props.uid, props.card.id, props.card.type, form)
+        .then(() => props.clear())
+      }}
+    default:
+      return baseActions
+  }
 }

@@ -4,8 +4,8 @@ const InputBox = props => (
   <div>
     <input
       type="text"
-      autoFocus={props.focus}
-      placeholder={props.label}
+      autoFocus={props.spec.focus}
+      placeholder={props.spec.label}
       value={props.value}
       onChange={ e => props.onChange(e.target.value) }
     />

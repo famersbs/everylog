@@ -1,6 +1,6 @@
 import React from 'react'
 
-import CardForm, {InputType}from '../../../../component/cardform'
+import CardForm, { InputType } from '../../../../component/cardform'
 
 const Body = (props) => {
   const spec = [
@@ -8,19 +8,21 @@ const Body = (props) => {
       type: InputType.DATETIME,
       property_name: 'target_date',
       label: 'Target Date',
+      default_set_now: true,
       is_required: true,
     },
     {
       type: InputType.NUMBER,
       property_name: 'amount',
-      label: props.setting.unit,
+      label: props.card.setting.unit,
       focus: true,
       is_required: true,
     },
   ]
+  const { save, clear } = props.actions
 
   return (
-    <CardForm spec={spec} />
+    <CardForm spec={spec} save={save} clear={clear} />
   )
 }
 

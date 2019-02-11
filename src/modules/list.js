@@ -1,9 +1,5 @@
-import moment from 'moment'
 import * as msgbox from '../utils/msgbox'
-
-import { store } from '../utils/fb'
-
-export const SUMMARY_DAY = 14     // 14 일 기준으로 써머리 한다.
+import * as cardDB from '../db/card'
 
 const UPDATE = 'list/update'
 const DELETE = 'list/delete'
@@ -51,31 +47,20 @@ export const watchCard = (uid) => {
   return (dispatch, getState) => {
     if(nowWatchedCard) return
     nowWatchedCard = true
-    store.collection('card')
-      .where("uid", "==", uid)
-      .where("archive", "==" , false)
-      .onSnapshot( {},
-        q => {
-          let currentUpdatedCards = {}
-          let deletedCards = []
-          const currentCards = getState().list.card
-          q.docChanges().forEach( change => {
-            if(change.type !== 'removed') {
-              const doc = change.doc
-              const cardID = doc.id
-              const card = doc.data()
-              card.id = doc.id    // added ID on doc --> it should be delete when it update
+    cardDB.watchCard(
+      uid,
+      (changedCards, deletedCards) => {
+        const currentCards = getState().list.card
+        const currentUpdatedCards = {}
 
-              if(currentCards[cardID] != null) {
-                card.logs = currentCards[cardID].logs
-              } else {
-                card.logs = []
-              }
-              currentUpdatedCards[cardID] = card;
-            } else {
-              deletedCards.push(change.doc.id)
-            }
-          })
+        changedCards.forEach( card => {
+          if(currentCards[card.id] != null) {
+            card.logs = currentCards[card.id].logs
+          } else {
+            card.logs = []
+          }
+          currentUpdatedCards[card.id] = card
+        })
 
         if (deletedCards.length > 0) {
           dispatch(deleteCards(deletedCards))
@@ -86,8 +71,8 @@ export const watchCard = (uid) => {
         watchCardLog(uid)(dispatch, getState)
       },
       e => {
-          msgbox.error('load fail', e)
-          console.log(e)
+        msgbox.error('load fail', e)
+        console.log(e)
       }
     )
   }
@@ -97,39 +82,31 @@ export const watchCardLog = (uid) => {
   return (dispatch, getState) => {
     if(nowWatchedCardLog) return
     nowWatchedCardLog = true
-    store.collection('cardlog')
-    .where("uid", "==", uid)
-    .where("target_date", ">=" , moment().subtract(SUMMARY_DAY, 'd').unix())  // get 14 days log
-    .onSnapshot( {},
-      q => {
-        let currentUpdatedCards = {}
+
+    cardDB.watchCardsLog(
+      uid,
+      (changedLogs, deletedLogs) => {
+
+        if(deletedLogs.length > 0) {
+          console.log("Removed card's logs", deletedLogs)
+        }
+
+        const currentUpdatedCards = []
         const currentCards = getState().list.card
-        q.docChanges().forEach( change => {
-          if(change.type !== 'removed') {
-            const doc = change.doc
-            const log = doc.data()
-            const card = currentCards[log.card_id]
-
-            if(card == null){
-              // It is archived card's log
-              return
-            }
-
-            const cardID = card.id
-
-            card.logs.push(log)
-            currentUpdatedCards[cardID] = card;
-          } else {
-            // Removed
-            console.log("Removed card log : ", change.doc.id)
-          }
+        changedLogs.forEach( l => {
+          const card = currentCards[l.card_id]
+          if (card == null) return  // It is archived card's log
+          card.logs.push(l)
+          currentUpdatedCards[card.id] = card;
         })
+
+        // for Rerender ( realloc card object )
+        Object.keys(currentUpdatedCards).forEach( k => {
+          currentUpdatedCards[k] = {...currentUpdatedCards[k]}
+        })
+
         dispatch(update(currentUpdatedCards))
-    },
-    e => {
-        msgbox.error('load fail', e)
-        console.log(e)
-    }
-  )
+      }
+    )
   }
 }

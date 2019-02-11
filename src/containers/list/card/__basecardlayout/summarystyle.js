@@ -1,39 +1,48 @@
 import React from 'react'
 import moment from 'moment'
 
-import './base.card.scss'
+const SummaryStyle = ({
+  card,
+  children,
+  options,
+  actions,
+}) => {
 
-const Base = (props) => {
+  const title = card.setting ? card.setting.title : ''
+
   return (
     <div className="item-box" >
-      {props.noTitle?null:(
+      {options.noTitle?null:(
         <div className="title-box">
           <div className="title">
-            {props.title}
+            {title}
           </div>
-          <button className="button" onClick={props.onClickEdit}>
+          <button className="button" onClick={actions.onClickEdit}>
             <i className="fas fa-edit" />
           </button>
-          <button className="button" onClick={props.onClickArchive}>
+          <button className="button" onClick={actions.onClickArchive}>
             <i className="fas fa-archive" />
+          </button>
+          <button className="button" onClick={actions.onClickDetailView}>
+            <i className="fas fa-external-link-square-alt" />
           </button>
         </div>
       )}
       <div className="status">
-        {props.children}
+        {children}
       </div>
-      {props.noFooter?null:(
+      {options.noFooter?null:(
         <div className="item-footer">
           <div className="left" >
             <button onClick={(e) => {
-              props.onClickWrite()
+              actions.onClickWrite()
               e.stopPropagation()
             } }>
               <i className="fas fa-pen" />
             </button>
           </div>
           <div className="right">
-            {moment.unix(props.updated_at).fromNow()}
+            {moment.unix(card.updated_at).fromNow()}
           </div>
         </div>
       )}
@@ -41,4 +50,4 @@ const Base = (props) => {
   )
 }
 
-  export default Base
+export default SummaryStyle
