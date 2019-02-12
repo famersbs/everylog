@@ -30,8 +30,12 @@ const getData = (card) =>  {
 
   // If some day has no amount, it should be use previous amount
   let previousAmount = 0
-  data = data.reverse().map(d => {
-    if(d == null) return previousAmount
+  data = data.reverse().map((d, i) => {
+
+    if(d == null){
+      if(i === data.length - 1) return 0
+      return previousAmount
+    }
     return (previousAmount = d)
   })
 
