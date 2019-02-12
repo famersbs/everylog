@@ -38,8 +38,7 @@ function CardLayout(props) {
 const mapStateToProps = ({ card, auth }, ownProps) => {
   return {
     uid: auth.uid,
-    // card: ownProps.card, // It just here for rerendering when list will be changed
-    card: (card.id === ownProps.card.id? card : ownProps.card)
+    card: (card.id === ownProps.card.id? {...ownProps.card, ...card} : ownProps.card)
   }
 }
 
@@ -112,7 +111,7 @@ const getCardActions = (props) => {
       }}
     case CardStatus.WRITE:
       return {...baseActions, save: (form) => {
-        addALog(props.uid, props.card.id, props.card.type, form)
+        addALog(props.uid, props.card, form)
         .then(() => props.clear())
       }}
     default:

@@ -1,8 +1,9 @@
 import { store } from '../utils/fb'
 import moment from 'moment'
 
-import { CardType } from '../type'
 import { DISPLAY_DATE_TIME } from '../component/cardform'
+
+import { getCardSummary } from './card/summary'
 
 export function createANewCard(uid, type, setting) {
   const d = moment().unix()
@@ -26,34 +27,35 @@ export function editACard(id, setting) {
   )
 }
 
-export function addALog(uid, card_id, type, log) {
+export function addALog(uid, card, log) {
   const d = moment().unix()
   const target_date = moment(log.target_date, DISPLAY_DATE_TIME).unix()
   delete log.target_date
 
-  //  Validate 해야 할까? --> 각 컴포넌트에서 하는것이 나을까?
-  return store.collection('cardlog').add({
-    uid, card_id, type, log,
+  const logDoc = {
+    uid,
+    card_id: card.id,
+    type: card.type,
+    log,
     created_at: d,
     updated_at: d,
     target_date: target_date,  // Serch option
-  }).then( r => {
-    const cardUpdateData = {
-      updated_at: d
-    }
-    // 업데이트 card 요약 정보 (Book일 경우)
-    if (type === CardType.BOOK) {
-      // 일단 마지막 걸로 업데이트 하는데, 이는 이전의 기록 보다 무조건 커야 한다는 조건이 필요 함
-      cardUpdateData.summary = {
-        progress: log.progress
+  }
+  //  Validate 해야 할까? --> 각 컴포넌트에서 하는것이 나을까?
+  return store.collection('cardlog')
+    .add(logDoc)
+    .then( r => {
+      const summary = getCardSummary(card, target_date, log)
+      const cardUpdateData = {
+        updated_at: d,
+        summary
       }
-    }
 
-    return store.collection('card')
-    .doc(card_id)
-    .update(cardUpdateData)
-    .then( () => r )
-  })
+      return store.collection('card')
+      .doc(card.id)
+      .update(cardUpdateData)
+      .then( () => r )
+    })
 }
 
 export function archive(card_id) {
@@ -120,10 +122,11 @@ export function watchCard(uid, onChange, onError) {
     .onSnapshot( {}, watchPreProcess(onChange), onError)
 }
 
-export const SUMMARY_DAY = 14     // 14 일 기준으로 써머리 한다.
+/*
 export function watchCardsLog(uid, onChange, onError) {
   return store.collection('cardlog')
     .where("uid", "==", uid)
     .where("target_date", ">=" , moment().subtract(SUMMARY_DAY, 'd').unix())  // get 14 days log
     .onSnapshot( {}, watchPreProcess(onChange), onError)
 }
+*/

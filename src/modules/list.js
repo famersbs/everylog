@@ -42,7 +42,6 @@ export const update = (cards) => {
 ////////////////////////////////////////////////////////////////////////////////////
 /// These are should be call only once when this app are starting below actions
 let nowWatchedCard = false
-let nowWatchedCardLog = false
 export const watchCard = (uid) => {
   return (dispatch, getState) => {
     if(nowWatchedCard) return
@@ -66,46 +65,10 @@ export const watchCard = (uid) => {
           dispatch(deleteCards(deletedCards))
         }
         dispatch(update(currentUpdatedCards))
-
-        // Call after Card load once
-        watchCardLog(uid)(dispatch, getState)
       },
       e => {
         msgbox.error('load fail', e)
         console.log(e)
-      }
-    )
-  }
-}
-
-export const watchCardLog = (uid) => {
-  return (dispatch, getState) => {
-    if(nowWatchedCardLog) return
-    nowWatchedCardLog = true
-
-    cardDB.watchCardsLog(
-      uid,
-      (changedLogs, deletedLogs) => {
-
-        if(deletedLogs.length > 0) {
-          console.log("Removed card's logs", deletedLogs)
-        }
-
-        const currentUpdatedCards = []
-        const currentCards = getState().list.card
-        changedLogs.forEach( l => {
-          const card = currentCards[l.card_id]
-          if (card == null) return  // It is archived card's log
-          card.logs.push(l)
-          currentUpdatedCards[card.id] = card;
-        })
-
-        // for Rerender ( realloc card object )
-        Object.keys(currentUpdatedCards).forEach( k => {
-          currentUpdatedCards[k] = {...currentUpdatedCards[k]}
-        })
-
-        dispatch(update(currentUpdatedCards))
       }
     )
   }
