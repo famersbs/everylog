@@ -24,11 +24,18 @@ function CardLayout(props) {
 
   // Get Current Card Component
   const CardComponent = getCardComponent(card, cardStatus)
+  const FooterCardComponent = getCardComponent(card, CardStatus.WRITE)
+
   return (
     <BaseCardLayout
       key={card.id} card={card} status={cardStatus}
       options={getBaseCardOptions(cardStatus)}
       actions={getBaseCardActions(props)}
+      popupFooter={(
+        <FooterCardComponent
+          card={card}
+          actions={getCardActions({...props, cardStatus: CardStatus.WRITE})} />
+      )}  //이게 좀 너무 복잡하다... 흠.. 어떻게 해야 할까?
     >
       <CardComponent card={card} actions={getCardActions(props)} />
     </BaseCardLayout>
@@ -67,7 +74,7 @@ const getBaseCardOptions = (status) => {
     case CardStatus.EDIT:
       return { ...baseOptions, noTitle: true, noFooter: true }
     case CardStatus.WRITE:
-      return { ...baseOptions, noTitle: true }
+      return { ...baseOptions, noTitle: true, noFooter: true }
     case CardStatus.DETAILVIEW:
       return { ...baseOptions, isPopup: true }
     default:

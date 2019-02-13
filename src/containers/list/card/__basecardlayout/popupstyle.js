@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
 
 import './popupstyle.scss'
@@ -6,7 +6,9 @@ import './popupstyle.scss'
 const DISPLAY_DATE_FORMAT = 'MMM DD, YYYY'
 
 const PopupStyle = (props) => {
-  const { card, children } = props
+  const { card, children, popupFooter } = props
+  const [isOpenFooter, setOpenFooter] = useState(false)
+
   return (
     <div className="item-popup">
       <div className="detail-bg">
@@ -32,13 +34,13 @@ const PopupStyle = (props) => {
         </div>
         <div className="footer">
           <div className="hidebtn">
-            <button>
-              <i className="fas fa-angle-up"></i>
+            <button onClick={() => setOpenFooter(!isOpenFooter)}>
+              <i className={`fas fa-angle-${isOpenFooter? 'down': 'up'}`}></i>
             </button>
           </div>
-          <div className={"contents"}>
+          <div className={`contents ${isOpenFooter?'':'hide'}`}>
             <div className="input-container">
-              footer input
+              {popupFooter}
             </div>
           </div>
         </div>
