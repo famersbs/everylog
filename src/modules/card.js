@@ -3,9 +3,6 @@ import { selectRow } from './settings'
 import * as cardDB from '../db/card'
 
 export const SELECT_CARD = 'card/select_card'
-
-
-
 export const CardStatus = {
   NONE: -1,
   NEW : 0,
@@ -87,7 +84,6 @@ export const showDetail = (card_id, type) => {
       // because if it does not set like this way,
       // the card deatailview disapear when window size will be changed
       dispatch(selectRow(type))
-
       dispatch({
         type: SELECT_CARD,
         payload: {
@@ -95,7 +91,6 @@ export const showDetail = (card_id, type) => {
           id: card_id,
           type,
           status: CardStatus.DETAILVIEW,
-
         }
       })
     })

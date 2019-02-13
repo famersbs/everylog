@@ -22,32 +22,9 @@ const PopupStyle = (props) => {
             </div>
             <div className="body">
               <div className="control-bar">
-                <div className="item">
-                  <div>
-                    <div>
-                      <div className="icon">
-                        <i className="far fa-calendar" />
-                      </div>
-                      <div className="form">
-                        <div className="label">Last updated</div>
-                        <div className="date">{moment.unix(card.updated_at).format(DISPLAY_DATE_FORMAT)}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="item">
-                  <div>
-                    <div>
-                      <div className="icon">
-                        <i className="far fa-clock" />
-                      </div>
-                      <div className="form">
-                        <div className="label">Duration</div>
-                        <div className="date">{card.setting.duration}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {renderControlbarItem("fa-calendar", "Created", moment.unix(card.created_at).format(DISPLAY_DATE_FORMAT))}
+                {renderControlbarItem("fa-calendar", "Last updated", moment.unix(card.updated_at).format(DISPLAY_DATE_FORMAT))}
+                {renderControlbarItem("fa-clock", "Duration", card.setting.duration)}
               </div>
               <div>{children}</div>
             </div>
@@ -71,3 +48,21 @@ const PopupStyle = (props) => {
 }
 
 export default PopupStyle
+
+function renderControlbarItem(icon, label, data) {
+  return (
+    <div className="item">
+      <div>
+        <div>
+          <div className="icon">
+            <i className={`far ${icon}`} />
+          </div>
+          <div className="form">
+            <div className="label">{label}</div>
+            <div className="date">{data}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

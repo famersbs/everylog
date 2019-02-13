@@ -87,15 +87,18 @@ export function getCardWithLogs(uid, card_id) {
         const data = doc.data()
         card.logs.push({
           ...data.log,
+          id: doc.id,
+          target_date: data.target_date,
           created_at: data.created_at,
           updated_at: data.updated_at
         })
       })
+      // sort by target_date asc
+      card.logs = card.logs.sort((a, b) => a.target_date - b.target_date)
     }
     return card
   })
 }
-
 
 //// Watch
 function watchPreProcess(onChange) {
@@ -122,11 +125,4 @@ export function watchCard(uid, onChange, onError) {
     .onSnapshot( {}, watchPreProcess(onChange), onError)
 }
 
-/*
-export function watchCardsLog(uid, onChange, onError) {
-  return store.collection('cardlog')
-    .where("uid", "==", uid)
-    .where("target_date", ">=" , moment().subtract(SUMMARY_DAY, 'd').unix())  // get 14 days log
-    .onSnapshot( {}, watchPreProcess(onChange), onError)
-}
-*/
+

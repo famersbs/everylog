@@ -61,6 +61,8 @@ export const watchCard = (uid) => {
           currentUpdatedCards[card.id] = card
         })
 
+        console.log(currentUpdatedCards)
+
         if (deletedCards.length > 0) {
           dispatch(deleteCards(deletedCards))
         }
