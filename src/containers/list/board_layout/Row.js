@@ -43,6 +43,7 @@ const Row = (props) => {
                 />
               })
             }
+            <div className="space" ></div>
           </div>
         </div>
       </div>
