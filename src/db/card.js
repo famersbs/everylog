@@ -118,6 +118,13 @@ function watchPreProcess(onChange) {
   }
 }
 
+/**
+ *
+ * @param {*} uid
+ * @param {*} onChange
+ * @param {*} onError
+ * @return {() => void}  unSnapshot
+ */
 export function watchCard(uid, onChange, onError) {
   return store.collection('card')
     .where("uid", "==", uid)
@@ -125,4 +132,17 @@ export function watchCard(uid, onChange, onError) {
     .onSnapshot( {}, watchPreProcess(onChange), onError)
 }
 
-
+/**
+ *
+ * @param {*} uid
+ * @param {*} card_id
+ * @param {*} onChange
+ * @param {*} onError
+ * @return {() => void}  unSnapshot
+ */
+export function watchLogs(uid, card_id, onChange, onError) {
+  return store.collection('cardlog')
+    .where('uid', '==', uid)
+    .where('card_id', '==', card_id)
+    .onSnapshot( {}, onChange, onError)
+}

@@ -33,14 +33,6 @@ export default (state = initialState, action) => {
         return state
   }
 }
-
-export const clear = () => {
-  return {
-    type: SELECT_CARD,
-    payload: initialState
-  }
-}
-
 export const create = (type) => {
   return {
     type: SELECT_CARD,
@@ -73,26 +65,72 @@ export const write = (card_id, type) => {
   }
 }
 
+let WatchLogUnSubscribe = null
+export const clear = () => {
+  return (dispatch, getState) => {
+
+    if (WatchLogUnSubscribe != null) {
+      WatchLogUnSubscribe()
+      WatchLogUnSubscribe = null
+    }
+    dispatch( {
+      type: SELECT_CARD,
+      payload: initialState
+    })
+  }
+}
+
 export const showDetail = (card_id, type) => {
   return (dispatch, getState) => {
     const uid = getState().auth.uid
+    const current_card = getState().list.card[card_id]
 
-    cardDB.getCardWithLogs(uid, card_id)
-    .then( card => {
-
-      // Set select row to this card's row_id
-      // because if it does not set like this way,
-      // the card deatailview disapear when window size will be changed
-      dispatch(selectRow(type))
-      dispatch({
-        type: SELECT_CARD,
-        payload: {
-          ...card,
-          id: card_id,
-          type,
-          status: CardStatus.DETAILVIEW,
-        }
-      })
+    dispatch(selectRow(type))
+    dispatch({
+      type: SELECT_CARD,
+      payload: {
+        ...current_card,
+        id: card_id,
+        type,
+        status: CardStatus.DETAILVIEW,
+      }
     })
+
+    /* Watch Logs */
+    WatchLogUnSubscribe = cardDB.watchLogs(
+      uid,
+      card_id,
+      (q) =>{
+        const card = getState().card
+        const logs = [...card.logs]
+
+        q.docChanges().forEach( change => {
+          if(change.type !== 'removed') {
+            const d = change.doc.data()
+            logs.push({
+              ...d.log,
+              id: d.id,
+              target_date: d.target_date,
+              created_at: d.created_at,
+              updated_at: d.updated_at
+            })
+          } else {
+            // deleted.push(change.doc.id) --> Not processed now -> it should be process ASAP
+          }
+        })
+
+        dispatch({
+          type: SELECT_CARD,
+          payload: {
+            ...card,
+            logs,
+          }
+        })
+
+      },
+      (err) => {
+        console.log("cardlog watch error ", err)
+      }
+    )
   }
 }
