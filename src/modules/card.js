@@ -115,7 +115,7 @@ export const showDetail = (card_id, type) => {
               updated_at: d.updated_at
             })
           } else {
-            // deleted.push(change.doc.id) --> Not processed now -> it should be process ASAP
+            logs = logs.filter( l => l.id === change.doc.id )
           }
         })
 
