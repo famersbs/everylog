@@ -2,6 +2,8 @@ import { selectRow } from './settings'
 
 import * as cardDB from '../db/card'
 
+import { UPDATE as LIST_UPDATE } from './list'
+
 export const SELECT_CARD = 'card/select_card'
 export const CardStatus = {
   NONE: -1,
@@ -27,10 +29,23 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SELECT_CARD:
-        return {...action.payload}
-    default:
+    case LIST_UPDATE:
+      const updated_card_id = Object.keys(action.payload).find( (v)=> v === state.id )
+      if (updated_card_id != null) {
+        const updated_card = action.payload[updated_card_id]
+        return {
+          ...state,
+          summary: updated_card.summary,
+          setting: updated_card.setting,
+          updated_at: updated_card.updated_at,
+        }
+      } else {
         return state
+      }
+    case SELECT_CARD:
+      return {...action.payload}
+    default:
+      return state
   }
 }
 export const create = (type) => {

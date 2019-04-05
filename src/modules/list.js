@@ -1,7 +1,7 @@
 import * as msgbox from '../utils/msgbox'
 import * as cardDB from '../db/card'
 
-const UPDATE = 'list/update'
+export const UPDATE = 'list/update'
 const DELETE = 'list/delete'
 
 const initialState = {
