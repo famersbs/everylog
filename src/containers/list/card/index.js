@@ -34,7 +34,7 @@ function CardLayout(props) {
       popupFooter={(
         <FooterCardComponent
           card={card}
-          actions={getCardActions({...props, cardStatus: CardStatus.WRITE})} />
+          actions={getCardActions({...props, cardStatus: CardStatus.WRITE}, false)} />
       )}  //이게 좀 너무 복잡하다... 흠.. 어떻게 해야 할까?
     >
       <CardComponent card={card} actions={getCardActions(props)} />
@@ -99,29 +99,27 @@ const getBaseCardActions = ({
   onClickClear : clear,
 })
 
-const getCardActions = (props) => {
-  const baseActions = {
-    clear: props.clear,
-    save: null,
-  }
+const getCardActions = (props, callClearAfterSave = true) => {
+  let _save = null
 
   switch(props.cardStatus) {
     case CardStatus.NEW:
-      return {...baseActions, save: (form) => {
-        createANewCard(props.uid, props.card.type, form)
-        .then(() => props.clear())
-      }}
+      _save = (form) => createANewCard(props.uid, props.card.type, form)
+      break;
     case CardStatus.EDIT:
-      return {...baseActions, save: (form) => {
-        editACard(props.card.id, form)
-        .then(() => props.clear())
-      }}
+      _save = (form) => editACard(props.card.id, form)
+      break;
     case CardStatus.WRITE:
-      return {...baseActions, save: (form) => {
-        addALog(props.uid, props.card, form)
-        .then(() => props.clear())
-      }}
+      _save = (form) => addALog(props.uid, props.card, form)
+      break;
     default:
-      return baseActions
+      _save = () => Promise.resolve(true)
+  }
+
+  const save = (form) => _save(form).then(() => callClearAfterSave? props.clear(): true)
+
+  return {
+    clear: props.clear,
+    save,
   }
 }

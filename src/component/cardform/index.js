@@ -9,8 +9,9 @@ import { DISPLAY_DATE_TIME, InputType } from './type'
 export { DISPLAY_DATE_TIME, InputType }
 
 const CardForm = props => {
+  const getForm = () => props.form?props.form:{}
   const { spec, clear, save } = props
-  const [formState, setForm] = useState(props.form?props.form:{})
+  const [formState, setForm] = useState(getForm())
   return (
     <div className="new_form">
       {spec.map(i => {
@@ -27,7 +28,17 @@ const CardForm = props => {
           value={value} />
       })}
       <div className="button-bar">
-        <button onClick={() => Validator(formState, spec) ? save(formState) : null}>Save</button>
+        <button onClick={
+          () => {
+            if (Validator(formState, spec)) {
+              save(formState)
+                .then( resetForm => {
+                  if (resetForm === true) {
+                    setForm(getForm())
+                  }
+                })
+            }
+          }}>Save</button>
         <button onClick={() => clear()}>Cancel</button>
       </div>
     </div>
