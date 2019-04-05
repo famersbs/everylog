@@ -31,7 +31,7 @@ const Book = (props) => {
           </button>
         </div>
         <div className="logs">
-          {logs.map( log => {
+          {logs.map( (log) => {
             return (
             <div key={log.id} className="log-container">
               <div className="log-header">

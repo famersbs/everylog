@@ -102,14 +102,14 @@ export const showDetail = (card_id, type) => {
       card_id,
       (q) =>{
         const card = getState().card
-        const logs = [...card.logs]
+        let logs = [...card.logs]
 
         q.docChanges().forEach( change => {
           if(change.type !== 'removed') {
             const d = change.doc.data()
             logs.push({
               ...d.log,
-              id: d.id,
+              id: change.doc.id,
               target_date: d.target_date,
               created_at: d.created_at,
               updated_at: d.updated_at
