@@ -18,7 +18,7 @@ const target = document.querySelector('#root')
 // Auth check
 auth()
   .onAuthStateChanged( user => {
-    let status = {}
+    let status: AUTH_STATUS = {isLogin:false}
     if(user){
       status.isLogin = true
       status.photoURL = user.photoURL

@@ -3,11 +3,16 @@ import * as msgbox from '../utils/msgbox'
 
 export const SET_STATUS = 'login/set_status'
 
-const initialState = {
+
+const initialState:AUTH_STATUS  = {
   isLogin: null // null -> before check, false -> not logined, true -> login
 }
+interface AUTH_ACTION {
+  type: string
+  payload: AUTH_STATUS
+}
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AUTH_ACTION) => {
   switch (action.type) {
     case SET_STATUS:
       return { ...state, ...action.payload }
@@ -16,7 +21,7 @@ export default (state = initialState, action) => {
   }
 }
 
-export const setLoginStatus = (status) => {
+export const setLoginStatus = (status: AUTH_STATUS) => {
   return {
     type: SET_STATUS,
     payload: {
@@ -26,7 +31,7 @@ export const setLoginStatus = (status) => {
 }
 
 export const login = () => {
-  return (dispatch) => {
+  return () => {
     auth().signInWithRedirect(googleProvider)
       .then( r => {
         console.log( "Login success" )
