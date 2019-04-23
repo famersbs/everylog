@@ -1,18 +1,21 @@
 import { auth, googleProvider } from '../utils/fb'
+import { Action } from 'redux'
 import * as msgbox from '../utils/msgbox'
 
 export const SET_STATUS = 'login/set_status'
 
-
 const initialState:AUTH_STATUS  = {
-  isLogin: null // null -> before check, false -> not logined, true -> login
+  isLogin: null
 }
-interface AUTH_ACTION {
-  type: string
+
+interface SetStatusAction {
+  type: typeof SET_STATUS
   payload: AUTH_STATUS
 }
 
-export default (state = initialState, action: AUTH_ACTION) => {
+export type ActionTypes = SetStatusAction
+
+const auth_reducer = (state:AUTH_STATUS = initialState, action: ActionTypes): AUTH_STATUS => {
   switch (action.type) {
     case SET_STATUS:
       return { ...state, ...action.payload }
@@ -20,14 +23,15 @@ export default (state = initialState, action: AUTH_ACTION) => {
       return state
   }
 }
+export default (state: any, action: Action<string>) => auth_reducer(state, action as ActionTypes);
 
-export const setLoginStatus = (status: AUTH_STATUS) => {
+export const setLoginStatus = (status: AUTH_STATUS): SetStatusAction => {
   return {
     type: SET_STATUS,
     payload: {
       ...status
     }
-  }
+  } as SetStatusAction
 }
 
 export const login = () => {
