@@ -4,7 +4,14 @@ import moment from "moment";
 import { DISPLAY_DATE_TIME } from "../../component/cardform";
 
 import { getCardSummary } from "./summary";
-import { CardType, CardSetting, Card, CardLog, CardID } from "../../type";
+import {
+  CardType,
+  CardSetting,
+  Card,
+  CardLog,
+  CardID,
+  CardLogs
+} from "../../type";
 
 export function createANewCard(
   uid: string,
@@ -35,7 +42,10 @@ export function editACard(id: CardID, setting: CardSetting) {
 
 export function addALog(uid: string, card: Card, log: CardLog) {
   const d = moment().unix();
-  const target_date = moment(log.target_date, DISPLAY_DATE_TIME).unix();
+  const target_date = moment(
+    log.target_date as string,
+    DISPLAY_DATE_TIME
+  ).unix();
   delete log.target_date;
 
   const logDoc = {
@@ -97,7 +107,12 @@ export function getCardWithLogs(uid: string, card_id: CardID) {
     if (logsSnap != null) {
       logsSnap.forEach(doc => {
         const data = doc.data();
-        card.logs.push({
+        let logs = card.logs;
+        if (logs === undefined) {
+          logs = card.logs = [] as CardLogs;
+        }
+
+        logs.push({
           ...data.log,
           id: doc.id,
           target_date: data.target_date,
@@ -106,9 +121,11 @@ export function getCardWithLogs(uid: string, card_id: CardID) {
         });
       });
       // sort by target_date asc
-      card.logs = card.logs.sort(
-        (a: CardLog, b: CardLog) => a.target_date - b.target_date
-      );
+      card.logs = card.logs.sort((a: CardLog, b: CardLog) => {
+        if (a.target_date === undefined) return 1;
+        if (b.target_date === undefined) return -1;
+        return a.target_date > b.target_date ? 1 : -1;
+      });
     }
     return card;
   });

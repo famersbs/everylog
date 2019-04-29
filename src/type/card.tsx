@@ -1,3 +1,5 @@
+import { number } from "prop-types";
+
 export type UNIXTIME = number;
 
 export enum CardType {
@@ -26,8 +28,8 @@ export interface Card {
   summary?: CardSummary;
   setting?: CardSetting;
 
-  // 이건 이제 아예 다른 곳에서 관리함 -> 여기서는 삭제 되어도 될뜻
-  logs?: CardLog;
+  // 이건 이제 아예 다른 곳에서 관리함 -> 여기서는 삭제 되어도 될듯
+  logs?: CardLogs;
 
   // 이건 UI에서만 사용되는 건데...
   status?: CardStatus; // 현재 선택된 카드의 상태
@@ -46,7 +48,16 @@ export type CardSetting =
   | BookCardSetting
   | any;
 
-export type CardLog = any;
+export type CardLog = {
+  id: string;
+  progress: number;
+  updated_at: number;
+  comment: string;
+  amount: number;
+  target_date?: string;
+};
+export type CardLogs = Array<CardLog>;
+
 export type CardID = string;
 
 export interface WorkoutCardSetting {

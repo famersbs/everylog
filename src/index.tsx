@@ -21,7 +21,7 @@ const target = document.querySelector("#root");
 const dispatch = store.dispatch as ThunkDispatch<{}, {}, AnyAction>;
 
 auth().onAuthStateChanged(user => {
-  let status: AUTH_STATUS = { isLogin: false };
+  let status: AUTH_STATE = { isLogin: false };
   if (user) {
     status.isLogin = true;
     status.photoURL = user.photoURL;

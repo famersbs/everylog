@@ -7,7 +7,7 @@ const UPDATE_ALL = "settings/update_all";
 
 const saveingSettingsProperties = ["selected_row"];
 
-interface SETTINGS_STATE {
+export interface SETTINGS_STATE {
   selected_row: CardType; // 이걸 enum으로 처리 하는건 어떨까?
 }
 

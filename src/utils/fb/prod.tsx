@@ -5,4 +5,4 @@ export default {
   projectId: "everylog-538f6",
   storageBucket: "everylog-538f6.appspot.com",
   messagingSenderId: "888015752192"
-}
+};

@@ -20,12 +20,14 @@ import {
 } from "../type";
 export { CardStatus };
 
-const initialState: Card = {
+export type CARD_STATE = Card;
+
+const initialState: CARD_STATE = {
   id: "",
   type: CardType.NONE,
   status: CardStatus.NONE,
   setting: null,
-  logs: null,
+  logs: [],
   updated_at: 0,
   created_at: 0
 };
@@ -108,7 +110,7 @@ const card_reducer = (state = initialState, action: ActionTypes) => {
 export default (state: any, action: Action<string>) =>
   card_reducer(state, action as ActionTypes);
 
-export const create = (type: string): CreateAction => {
+export const create = (type: CardType): CreateAction => {
   return {
     type: SELECT_CARD,
     payload: {
@@ -118,7 +120,7 @@ export const create = (type: string): CreateAction => {
   } as CreateAction;
 };
 
-export const edit = (card_id: string, _: any, type: string): EditAction => {
+export const edit = (card_id: string, _: any, type: CardType): EditAction => {
   return {
     type: SELECT_CARD,
     payload: {
@@ -129,7 +131,7 @@ export const edit = (card_id: string, _: any, type: string): EditAction => {
   } as EditAction;
 };
 
-export const write = (card_id: string, type: string): WriteAction => {
+export const write = (card_id: string, type: CardType): WriteAction => {
   return {
     type: SELECT_CARD,
     payload: {

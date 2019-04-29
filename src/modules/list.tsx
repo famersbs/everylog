@@ -11,8 +11,11 @@ interface DeleteCardsAction {
   type: typeof DELETE;
   payload: [string];
 }
-interface Cards {
+export interface Cards {
   [id: string]: Card;
+}
+export interface LIST_STATE {
+  card: Cards;
 }
 
 export interface UpdateAction {
@@ -20,9 +23,7 @@ export interface UpdateAction {
   payload: Cards;
 }
 
-const initialState: {
-  card: Cards;
-} = {
+const initialState: LIST_STATE = {
   card: {}
 };
 
